@@ -51,6 +51,7 @@ const schema = gql`
     associatedDate: Date
     notes: String
     tags: [ArchiveTagInput]
+    tagGroups: [ArchiveTagInput]
     acquiredBy: String # ultimately a Cecilian userId, for now a freeform string
     createdBy: String # ultimately a Cecilian userId, for now a freeform string
     uploadedBy: String # ultimately a Cecilian userId, for now a freeform string
