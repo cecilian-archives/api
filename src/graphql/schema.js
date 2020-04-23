@@ -11,9 +11,29 @@ const schema = gql`
   type Query {
     getArchiveItems: [ArchiveItem]
     getArchiveItemsByIdList(ids: [String!]!): [ArchiveItem]
-    getArchiveItemsByFreeformAcquirer(acquirer: String): [ArchiveItem]
-    getArchiveItemsByCollection(collection: String): [ArchiveItem]
+    getArchiveItemsByFreeformAcquirer(
+      acquirer: String
+      sortBy: String
+      sortOrder: String
+    ): [ArchiveItem]
+    getArchiveItemsByCollection(
+      collection: String
+      sortBy: String
+      sortOrder: String
+    ): [ArchiveItem]
+    getArchiveItemsByArchiveReference(
+      reference: String
+      sortBy: String
+      sortOrder: String
+    ): [ArchiveItem]
     getCecilianById(id: String): Cecilian
+    getYearById(id: String): Year
+    getEventById(id: String): Event
+    getRoleById(id: String): Role
+    getAllCecilians: [Cecilian]
+    getAllYears: [Year]
+    getAllEvents: [Event]
+    getAllRoles: [Role]
   }
   type Mutation {
     setArchiveItem(item: ArchiveItemInput!): ArchiveItem

@@ -1,4 +1,4 @@
-import { collection, query, where } from "typesaurus";
+import { collection, query, where, order } from "typesaurus";
 
 const getManyFromCollectionOnMatchField = (collectionName) => (
   fieldNameToMatch,
@@ -10,6 +10,7 @@ const getManyFromCollectionOnMatchField = (collectionName) => (
 
   const matchingItems = await query(items, [
     where(fieldNameToMatch, "==", matchArg),
+    order(args.sortBy || fieldNameToMatch, args.sortOrder || "asc"),
   ]);
 
   return matchingItems.map((item) => ({

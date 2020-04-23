@@ -21,7 +21,17 @@ const resolvers = {
     getArchiveItemsByCollection: getManyFromCollectionOnMatchField(
       "archiveItems"
     )("collection", "collection"),
+    getArchiveItemsByArchiveReference: getManyFromCollectionOnMatchField(
+      "archiveItems"
+    )("archiveId", "reference"),
     getCecilianById: getOneFromCollectionById("cecilians"),
+    getYearById: getOneFromCollectionById("years"),
+    getEventById: getOneFromCollectionById("events"),
+    getRoleById: getOneFromCollectionById("roles"),
+    getAllCecilians: getAllItemsInCollection("cecilians"),
+    getAllYears: getAllItemsInCollection("years"),
+    getAllEvents: getAllItemsInCollection("events"),
+    getAllRoles: getAllItemsInCollection("roles"),
   },
   ArchiveItem: {
     acquiredBy: getOneItemByRef,
