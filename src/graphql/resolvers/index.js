@@ -1,34 +1,69 @@
-import getArchiveItems from "./getArchiveItems";
-import getCecilianById from "./getCecilianById";
-import getTagsById from "./getTagsById";
-import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
-import setArchiveItem from "./setArchiveItem";
-import setCecilian from "./setCecilian";
 import DateType from "./DateType";
+import getOneFromCollectionById from "./getOneFromCollectionById";
+import getOneItemByRef from "./getOneItemByRef";
+import getManyFromCollectionByIdList from "./getManyFromCollectionByIdList";
+import getManyFromCollectionOnMatchField from "./getManyFromCollectionOnMatchField";
+import getAllItemsInCollection from "./getAllItemsInCollection";
+import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
+import resolveArchiveTagType from "./resolveArchiveTagType";
+import setItemOnCollection from "./setItemOnCollection";
 
 const resolvers = {
   Date: DateType,
   Query: {
-    getArchiveItems,
-    getCecilianById,
+    getArchiveItems: getAllItemsInCollection("archiveItems"),
+    getArchiveItemsByIdList: getManyFromCollectionByIdList("archiveItems")(
+      "ids"
+    ),
+    getArchiveItemsByFreeformAcquirer: getManyFromCollectionOnMatchField(
+      "archiveItems"
+    )("acquiredByFreeform", "acquirer"),
+    getArchiveItemsByCollection: getManyFromCollectionOnMatchField(
+      "archiveItems"
+    )("collection", "collection"),
+    getCecilianById: getOneFromCollectionById("cecilians"),
   },
   ArchiveItem: {
-    acquiredBy: getCecilianById,
-    createdBy: getCecilianById,
-    uploadedBy: getCecilianById,
-    tagGroups: getSubcollectionOnCollection("tagGroups", "archiveItems"),
+    acquiredBy: getOneItemByRef,
+    createdBy: getOneItemByRef,
+    uploadedBy: getOneItemByRef,
+    tags: getSubcollectionOnCollection("tags", "archiveItems"),
     files: getSubcollectionOnCollection("files", "archiveItems"),
   },
   Cecilian: {
-    tagGroups: getSubcollectionOnCollection("tagGroups", "cecilians"),
+    tags: getSubcollectionOnCollection("tags", "cecilians"),
   },
-  ArchiveTagGroup: {
-    tags: getTagsById,
-    addedBy: getCecilianById,
+  ArchiveTag: {
+    __resolveType: resolveArchiveTagType,
+    createdBy: getOneItemByRef,
+    updatedBy: getOneItemByRef,
+  },
+  PersonTag: {
+    person: getOneItemByRef,
+  },
+  YearTag: {
+    year: getOneItemByRef,
+  },
+  EventTag: {
+    event: getOneItemByRef,
+    year: getOneItemByRef,
+  },
+  RoleTag: {
+    role: getOneItemByRef,
+    year: getOneItemByRef,
+    event: getOneItemByRef,
+  },
+  Event: {
+    year: getOneItemByRef,
+  },
+  Year: {
+    shows: getManyFromCollectionByIdList("events")("shows"),
   },
   Mutation: {
-    setArchiveItem,
-    setCecilian,
+    setArchiveItem: setItemOnCollection("archiveItems")({
+      itemArgName: "item",
+    }),
+    setCecilian: setItemOnCollection("cecilians")({ itemArgName: "cecilian" }),
   },
 };
 

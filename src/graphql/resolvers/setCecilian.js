@@ -3,7 +3,7 @@ import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 
 const setCecilian = async (parent, args, context, info) => {
   const cecilians = collection("cecilians");
-  const { tagGroups: tagGroupArgs, ...cecilianArgs } = args.cecilian;
+  const { tags: tagArgs, ...cecilianArgs } = args.cecilian;
   const data = { ...cecilianArgs, updatedAt: value("serverDate") };
 
   const cecilian = cecilianArgs.id
@@ -14,7 +14,7 @@ const setCecilian = async (parent, args, context, info) => {
   const tagGroupSubcollection = tagGroupType(cecilian.ref.id);
 
   await Promise.all(
-    tagGroupArgs.map(async tagGroupInput => {
+    tagGroupArgs.map(async (tagGroupInput) => {
       const data = {
         tagIds: value("arrayUnion", tagGroupInput.tagIds),
         addedBy: tagGroupInput.addedById

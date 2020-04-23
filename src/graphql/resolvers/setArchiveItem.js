@@ -3,9 +3,9 @@ import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 
 const setArchiveItem = async (parent, args, context, info) => {
   const archiveItems = collection("archiveItems");
-  const { tagGroups: tagGroupArgs, files: fileArgs, ...itemArgs } = args.item;
-  // TODO: turn these into Cecilian userIds, and use ref type
+  const { tags: tagArgs, files: fileArgs, ...itemArgs } = args.item;
   const {
+    // TODO: turn these into Cecilian userIds, and use ref type
     acquiredBy: acquiredByFreeform,
     createdBy,
     uploadedBy: uploadedByFreeform,
@@ -34,7 +34,7 @@ const setArchiveItem = async (parent, args, context, info) => {
   await Promise.all([
     // Set tag groups
     ...(tagGroupArgs
-      ? tagGroupArgs.map(async tagGroupInput => {
+      ? tagGroupArgs.map(async (tagGroupInput) => {
           const data = {
             tagIds: value("arrayUnion", tagGroupInput.tagIds),
             addedBy: tagGroupInput.addedById
@@ -51,7 +51,7 @@ const setArchiveItem = async (parent, args, context, info) => {
       : []),
     // Set files
     ...(fileArgs
-      ? fileArgs.map(async fileInput => {
+      ? fileArgs.map(async (fileInput) => {
           await set(
             filesSubcollection,
             fileInput.kind,

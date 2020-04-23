@@ -10,6 +10,9 @@ import { gql } from "apollo-server-cloud-functions";
 const schema = gql`
   type Query {
     getArchiveItems: [ArchiveItem]
+    getArchiveItemsByIdList(ids: [String!]!): [ArchiveItem]
+    getArchiveItemsByFreeformAcquirer(acquirer: String): [ArchiveItem]
+    getArchiveItemsByCollection(collection: String): [ArchiveItem]
     getCecilianById(id: String): Cecilian
   }
   type Mutation {
@@ -27,7 +30,7 @@ const schema = gql`
     collection: String
     associatedDate: Date
     notes: String
-    tagGroups: [ArchiveTagGroup]
+    tags: [ArchiveTag]
     acquiredBy: Cecilian
     acquiredByFreeform: String
     createdBy: Cecilian
@@ -35,6 +38,7 @@ const schema = gql`
     uploadedByFreeform: String
     createdAt: Date
     updatedAt: Date
+    updatedBy: Cecilian
     files: [TransloaditFile]
   }
 
@@ -46,7 +50,7 @@ const schema = gql`
     collection: String
     associatedDate: Date
     notes: String
-    tagGroups: [ArchiveTagGroupInput]
+    tags: [ArchiveTagInput]
     acquiredBy: String # ultimately a Cecilian userId, for now a freeform string
     createdBy: String # ultimately a Cecilian userId, for now a freeform string
     uploadedBy: String # ultimately a Cecilian userId, for now a freeform string
@@ -57,7 +61,8 @@ const schema = gql`
     id: String!
     userId: String
     name: String
-    tagGroups: [ArchiveTagGroup]
+    tags: [ArchiveTag]
+    createdAt: Date
     updatedAt: Date
   }
 
@@ -65,34 +70,95 @@ const schema = gql`
     id: String
     userId: String
     name: String
-    tagGroups: [ArchiveTagGroupInput]
+    tags: [ArchiveTagInput]
   }
 
-  type ArchiveTagGroup {
-    id: String
-    tags: [ArchiveTag]
-    addedBy: Cecilian
-    addedAt: Date
-  }
-
-  input ArchiveTagGroupInput {
-    id: String
-    tagIds: [String]!
-    addedById: String
-  }
-
-  type ArchiveTag {
+  interface ArchiveTag {
     id: String!
-    tagType: ArchiveTagType!
-    tagValue: String!
-    tagPerson: Cecilian
+    type: ArchiveTagType!
+    createdBy: Cecilian
+    createdAt: Date
+    updatedBy: Cecilian
+    updatedAt: Date
+  }
+
+  type PersonTag implements ArchiveTag {
+    id: String!
+    type: ArchiveTagType!
+    createdBy: Cecilian
+    createdAt: Date
+    updatedBy: Cecilian
+    updatedAt: Date
+    person: Cecilian
+  }
+  type YearTag implements ArchiveTag {
+    id: String!
+    type: ArchiveTagType!
+    createdBy: Cecilian
+    createdAt: Date
+    updatedBy: Cecilian
+    updatedAt: Date
+    year: Year
+  }
+  type EventTag implements ArchiveTag {
+    id: String!
+    type: ArchiveTagType!
+    createdBy: Cecilian
+    createdAt: Date
+    updatedBy: Cecilian
+    updatedAt: Date
+    event: Event
+    year: Year
+  }
+  type RoleTag implements ArchiveTag {
+    id: String!
+    type: ArchiveTagType!
+    createdBy: Cecilian
+    createdAt: Date
+    updatedBy: Cecilian
+    updatedAt: Date
+    role: Role
+    year: Year
+    event: Event
+  }
+
+  input ArchiveTagInput {
+    id: String
+    type: ArchiveTagType!
+    person: String # Cecilian ID
+    year: String # Year ref
+    event: String # Event ref
+    role: String # Role ref
+    createdById: String # user ID
+    updatedById: String # user ID
+  }
+
+  type Year {
+    id: String!
+    name: String!
+    startDate: Date
+    endDate: Date
+    shows: [Event]
+  }
+  type Event {
+    id: String!
+    type: EventType!
+    name: String!
+    year: Year
+    startDate: Date
+    endDate: Date
+  }
+  type Role {
+    id: String!
+    type: RoleType!
+    name: String!
   }
 
   enum ArchiveItemAcquisitionMethod {
     TRANSCRIPTION
     SCAN
-    DIGITAL_NATIVE
     PREVIOUSLY_DIGITISED
+    CREATED_DIGITALLY
   }
 
   enum ArchiveItemType {
@@ -101,12 +167,19 @@ const schema = gql`
   }
 
   enum ArchiveTagType {
+    YEAR
+    EVENT
+    ROLE
+    PERSON
+  }
+  enum EventType {
+    SHOW
     ANNIVERSARY
     EVENT
-    PERSON
-    ROLE
-    SHOW
-    YEAR
+  }
+  enum RoleType {
+    SOCIETY
+    PERFORMANCE
   }
 
   enum ArchiveFileKind {
