@@ -66,6 +66,9 @@ const resolvers = {
   Event: {
     year: getOneItemByRef,
   },
+  Role: {
+    event: getOneItemByRef,
+  },
   Year: {
     shows: getManyFromCollectionByIdList("events")("shows"),
   },

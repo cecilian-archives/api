@@ -173,6 +173,7 @@ const schema = gql`
     id: String!
     type: RoleType!
     name: String!
+    event: Event
   }
 
   enum ArchiveItemAcquisitionMethod {
