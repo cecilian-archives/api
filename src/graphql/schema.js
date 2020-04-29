@@ -200,8 +200,10 @@ const schema = gql`
     EVENT
   }
   enum RoleType {
-    SOCIETY
     PERFORMANCE
+    PRODUCTION
+    COMMITTEE
+    SOCIETY
   }
 
   enum ArchiveFileKind {
