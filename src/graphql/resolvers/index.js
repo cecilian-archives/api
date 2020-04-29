@@ -2,7 +2,7 @@ import DateType from "./DateType";
 import getOneFromCollectionById from "./getOneFromCollectionById";
 import getOneItemByRef from "./getOneItemByRef";
 import getManyFromCollectionByIdList from "./getManyFromCollectionByIdList";
-import getManyFromCollectionOnMatchField from "./getManyFromCollectionOnMatchField";
+import getManyFromCollectionOnMatchFields from "./getManyFromCollectionOnMatchFields";
 import getAllItemsInCollection from "./getAllItemsInCollection";
 import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 import resolveArchiveTagType from "./resolveArchiveTagType";
@@ -15,15 +15,15 @@ const resolvers = {
     getArchiveItemsByIdList: getManyFromCollectionByIdList("archiveItems")(
       "ids"
     ),
-    getArchiveItemsByFreeformAcquirer: getManyFromCollectionOnMatchField(
+    getArchiveItemsByFreeformAcquirer: getManyFromCollectionOnMatchFields(
       "archiveItems"
-    )("acquiredByFreeform", "acquirer"),
-    getArchiveItemsByCollection: getManyFromCollectionOnMatchField(
+    )([{ field: "acquiredByFreeform", arg: "acquirer" }]),
+    getArchiveItemsByCollection: getManyFromCollectionOnMatchFields(
       "archiveItems"
-    )("collection", "collection"),
-    getArchiveItemsByArchiveReference: getManyFromCollectionOnMatchField(
+    )([{ field: "collection", arg: "collection" }]),
+    getArchiveItemsByArchiveReference: getManyFromCollectionOnMatchFields(
       "archiveItems"
-    )("archiveId", "reference"),
+    )([{ field: "archiveId", arg: "reference" }]),
     getCecilianById: getOneFromCollectionById("cecilians"),
     getYearById: getOneFromCollectionById("years"),
     getEventById: getOneFromCollectionById("events"),
@@ -70,7 +70,10 @@ const resolvers = {
     event: getOneItemByRef,
   },
   Year: {
-    shows: getManyFromCollectionByIdList("events")("shows"),
+    shows: getManyFromCollectionOnMatchFields("events")([
+      { field: "type", arg: "SHOW", hardValue: true },
+      { field: "year", arg: "id", refArg: "years" },
+    ]),
   },
   Mutation: {
     setArchiveItem: setItemOnCollection("archiveItems")({
