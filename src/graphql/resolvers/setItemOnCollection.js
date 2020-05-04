@@ -1,5 +1,6 @@
 import { collection, subcollection, add, set, value, ref } from "typesaurus";
 import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
+import getOneItemByRef from "./getOneItemByRef";
 
 const setItemOnCollection = (collectionName) => ({
   itemArgName,
@@ -34,11 +35,10 @@ const setItemOnCollection = (collectionName) => ({
     updatedAt: value("serverDate"),
   };
 
-  const savedItem = itemArgs.id
+  const savedItemRef = itemArgs.id
     ? await set(items, itemArgs.id, data, { merge: true })
     : await add(items, data);
-
-  const savedItemId = savedItem.ref.id;
+  const savedItem = await getOneItemByRef(null, { ref: savedItemRef });
 
   await Promise.all([
     // Set tags
@@ -62,7 +62,7 @@ const setItemOnCollection = (collectionName) => ({
           };
           await setItemOnCollection(collectionName)({
             subcollectionName: "tags",
-            parentId: savedItemId,
+            parentId: savedItem.id,
           })(parent, tagRefs, context, info);
         })
       : []),
@@ -71,26 +71,22 @@ const setItemOnCollection = (collectionName) => ({
       ? fileArgs.map(async (fileInput) => {
           await setItemOnCollection(collectionName)({
             subcollectionName: "files",
-            parentId: savedItemId,
+            parentId: savedItem.id,
           })(parent, { id: fileInput.kind, ...fileInput }, context, info);
         })
       : []),
   ]);
 
   if (Boolean(subcollectionName)) {
-    return {
-      id: savedItemId,
-      ...savedItem.data,
-    };
+    return savedItem;
   } else {
     const getTags = getSubcollectionOnCollection("tags", collectionName);
-    const tags = await getTags({ id: savedItemId });
+    const tags = await getTags({ id: savedItem.id });
     const getFiles = getSubcollectionOnCollection("files", collectionName);
-    const files = await getFiles({ id: savedItemId });
+    const files = await getFiles({ id: savedItem.id });
 
     return {
-      id: savedItemId,
-      ...savedItem.data,
+      ...savedItem,
       ...(tags ? { tags } : {}),
       ...(files ? { files } : {}),
     };

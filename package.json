@@ -1,6 +1,6 @@
 {
   "name": "@cecilian-archives/api",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "main": "dist/functions.js",
   "license": "MIT",
   "scripts": {
@@ -25,9 +25,9 @@
   },
   "dependencies": {
     "apollo-server-cloud-functions": "^2.11.0",
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "8.11.0",
     "firebase-functions": "3.5.0",
     "graphql": "^14.6.0",
-    "typesaurus": "^5.3.0"
+    "typesaurus": "6.0.0"
   }
 }
