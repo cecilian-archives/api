@@ -24,7 +24,6 @@ const setItemOnCollection = (collectionName) => ({
     uploadedBy: uploadedByFreeform,
     createdById,
     updatedById,
-    tagGroups, // TODO: remove this entirely when frontend updated to stop sending it
     ...itemExtraction
   } = itemArgs;
   const data = {
