@@ -3,10 +3,9 @@ const functions = require("firebase-functions");
 import admin from "firebase-admin";
 const serviceAccount = require("./serviceAccountKey.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://cecilian-archives.firebaseio.com",
-});
+const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+adminConfig.credential = admin.credential.cert(serviceAccount);
+admin.initializeApp(adminConfig);
 
 const handler = apolloServer.createHandler({
   cors: {

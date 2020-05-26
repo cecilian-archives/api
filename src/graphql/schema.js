@@ -206,9 +206,18 @@ const schema = gql`
   }
 
   enum ArchiveFileKind {
+    # Original uploaded file
     PRIMARY
+    # Documents (PDF e.g. minutes)
     THUMBNAIL
     ANIMATED_THUMBNAIL
+    # Images
+    OPTIMISED
+    SMALL
+    SMALL_SQUARE
+    MEDIUM
+    MEDIUM_SQUARE
+    LARGE
   }
 
   type TransloaditFile {
