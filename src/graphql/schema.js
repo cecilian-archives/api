@@ -69,6 +69,7 @@ const schema = gql`
     type: ArchiveItemType
     acquisitionMethod: ArchiveItemAcquisitionMethod
     collection: String
+    indexInCollection: String
     associatedDate: Date
     notes: String
     tags: [ArchiveTagInput]
