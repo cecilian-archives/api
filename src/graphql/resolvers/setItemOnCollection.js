@@ -1,4 +1,4 @@
-import { collection, subcollection, add, set, value, ref } from "typesaurus";
+import { collection, subcollection, add, update, value, ref } from "typesaurus";
 import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 import getOneItemByRef from "./getOneItemByRef";
 
@@ -12,9 +12,12 @@ const setItemOnCollection = (collectionName) => ({
     ? subcollection(subcollectionName, parentCollection)(parentId)
     : parentCollection;
 
-  const { tags: tagArgs, files: fileArgs, ...itemArgs } = subcollectionName
-    ? args
-    : args[itemArgName];
+  const {
+    tags: tagArgs,
+    files: fileArgs,
+    id: providedId,
+    ...itemArgs
+  } = subcollectionName ? args : args[itemArgName];
 
   const {
     // TODO: turn these kinds of things into Cecilian userIds, and use ref type
@@ -30,13 +33,14 @@ const setItemOnCollection = (collectionName) => ({
     ...itemExtraction,
     ...(acquiredByFreeform ? { acquiredByFreeform } : {}),
     ...(uploadedByFreeform ? { uploadedByFreeform } : {}),
-    ...(itemArgs.id ? {} : { createdAt: value("serverDate") }),
+    ...(providedId ? {} : { createdAt: value("serverDate") }),
     updatedAt: value("serverDate"),
   };
 
-  const savedItemRef = itemArgs.id
-    ? await set(items, itemArgs.id, data, { merge: true })
+  const savedItemResponse = providedId
+    ? await update(items, providedId, data)
     : await add(items, data);
+  const savedItemRef = providedId ? ref(items, providedId) : savedItemResponse;
   const savedItem = await getOneItemByRef(null, { ref: savedItemRef });
 
   await Promise.all([

@@ -1,6 +1,6 @@
 {
   "name": "@cecilian-archives/api",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "main": "dist/functions.js",
   "license": "MIT",
   "scripts": {
