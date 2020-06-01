@@ -7,6 +7,7 @@ import getAllItemsInCollection from "./getAllItemsInCollection";
 import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 import resolveArchiveTagType from "./resolveArchiveTagType";
 import setItemOnCollection from "./setItemOnCollection";
+import getItemsByTag from "./getItemsByTag";
 
 const resolvers = {
   Date: DateType,
@@ -32,6 +33,8 @@ const resolvers = {
     getAllYears: getAllItemsInCollection("years"),
     getAllEvents: getAllItemsInCollection("events"),
     getAllRoles: getAllItemsInCollection("roles"),
+    getArchiveItemsByTag: getItemsByTag("archiveItems"),
+    getCeciliansByTag: getItemsByTag("cecilians"),
   },
   ArchiveItem: {
     acquiredBy: getOneItemByRef,

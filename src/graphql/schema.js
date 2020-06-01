@@ -34,6 +34,11 @@ const schema = gql`
     getAllYears: [Year]
     getAllEvents: [Event]
     getAllRoles: [Role]
+    getArchiveItemsByTag(
+      tagType: ArchiveTagType!
+      tagValueId: String!
+    ): [ArchiveItem]
+    getCeciliansByTag(tagType: ArchiveTagType!, tagValueId: String!): [Cecilian]
   }
   type Mutation {
     setArchiveItem(item: ArchiveItemInput!): ArchiveItem
