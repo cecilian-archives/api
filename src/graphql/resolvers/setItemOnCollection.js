@@ -75,7 +75,7 @@ const setItemOnCollection = (collectionName) => ({
           await setItemOnCollection(collectionName)({
             subcollectionName: "files",
             parentId: savedItem.id,
-          })(parent, { id: fileInput.kind, ...fileInput }, context, info);
+          })(parent, fileInput, context, info);
         })
       : []),
   ]);
