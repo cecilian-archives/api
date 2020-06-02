@@ -271,7 +271,7 @@ const schema = gql`
     average_color: String
   }
   input TransloaditFileInput {
-    id: String!
+    id: String
     kind: ArchiveFileKind!
     name: String
     basename: String
