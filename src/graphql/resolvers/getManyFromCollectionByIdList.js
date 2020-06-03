@@ -9,7 +9,8 @@ const getManyFromCollectionByIdList = (collectionName) => (
 
   const idList = parent ? refs.map((ref) => ref.id) : args[listFieldName];
   const wantedItems = await getMany(items, idList);
-  return wantedItems.map((item) => ({
+  const returnableItems = wantedItems.filter((item) => !item.data.hidden);
+  return returnableItems.map((item) => ({
     id: item.ref.id,
     ...item.data,
   }));

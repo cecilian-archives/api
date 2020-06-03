@@ -42,6 +42,8 @@ const getItemsByTag = (collectionName) => async (
     )
   );
 
+  // No direct "returnable items" filter on Boolean hidden here
+  // because this is dealt with in the called method
   return getManyFromCollectionByIdList(collectionName)("parentIds")(null, {
     parentIds,
   });

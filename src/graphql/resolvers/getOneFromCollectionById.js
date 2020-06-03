@@ -11,6 +11,8 @@ const getOneFromCollectionById = (collectionName) => async (
   if (!ref) return null;
 
   const item = await get(items, ref.id);
+  if (!item || item.data.hidden) return null;
+
   return {
     id: item.ref.id,
     ...item.data,

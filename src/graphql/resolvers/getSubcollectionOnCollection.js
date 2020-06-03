@@ -12,7 +12,8 @@ const getSubcollectionOnCollection = (
   const docsOfSubcollection = subcollectionRef(docRef.id);
 
   const documents = await all(docsOfSubcollection);
-  return documents.map(document => ({
+  const returnableDocuments = documents.filter((item) => !item.data.hidden);
+  return returnableDocuments.map((document) => ({
     id: document.ref.id,
     ...document.data,
   }));

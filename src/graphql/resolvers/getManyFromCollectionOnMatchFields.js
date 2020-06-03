@@ -21,8 +21,9 @@ const getManyFromCollectionOnMatchFields = (collectionName) => (
     : [];
 
   const matchingItems = await query(items, [...matchWheres, ...sorts]);
+  const returnableItems = matchingItems.filter((item) => !item.data.hidden);
 
-  return matchingItems.map((item) => ({
+  return returnableItems.map((item) => ({
     id: item.ref.id,
     ...item.data,
   }));

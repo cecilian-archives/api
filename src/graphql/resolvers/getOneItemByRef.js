@@ -6,7 +6,7 @@ const getOneItemByRef = async (parent, args, context, info) => {
 
   const item = await get(ref);
 
-  if (!item) return null;
+  if (!item || item.data.hidden) return null;
   return {
     id: item.ref.id,
     ...item.data,
