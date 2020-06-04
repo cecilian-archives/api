@@ -91,6 +91,8 @@ const schema = gql`
     tags: [ArchiveTag]
     createdAt: Date
     updatedAt: Date
+    activeFrom: Date
+    activeTo: Date
   }
 
   input CecilianInput {
