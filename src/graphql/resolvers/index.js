@@ -8,6 +8,7 @@ import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 import resolveArchiveTagType from "./resolveArchiveTagType";
 import setItemOnCollection from "./setItemOnCollection";
 import getItemsByTag from "./getItemsByTag";
+import setItemByMatchFields from "./setItemByMatchFields";
 
 const resolvers = {
   Date: DateType,
@@ -83,6 +84,9 @@ const resolvers = {
       itemArgName: "item",
     }),
     setCecilian: setItemOnCollection("cecilians")({ itemArgName: "cecilian" }),
+    setArchiveItemByArchiveReference: setItemByMatchFields("archiveItems")({
+      itemArgName: "item",
+    }),
   },
 };
 

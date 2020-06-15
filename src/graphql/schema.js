@@ -43,6 +43,7 @@ const schema = gql`
   type Mutation {
     setArchiveItem(item: ArchiveItemInput!): ArchiveItem
     setCecilian(cecilian: CecilianInput!): Cecilian
+    setArchiveItemByArchiveReference(item: ArchiveItemInput!): ArchiveItem
   }
 
   scalar Date
