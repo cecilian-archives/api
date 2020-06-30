@@ -1,13 +1,7 @@
 import { ApolloServer } from "apollo-server-cloud-functions";
 import schema from "./schema";
 import resolvers from "./resolvers/";
-
-const dotenv = require("dotenv");
-const dotenvExpand = require("dotenv-expand");
-const myEnv = dotenv.config({
-  path: process.env.NODE_ENV === "production" ? ".env" : ".env.dev",
-});
-dotenvExpand(myEnv);
+import dotenv from "dotenv/config";
 
 const apolloServer = new ApolloServer({
   typeDefs: schema,
@@ -21,7 +15,7 @@ const apolloServer = new ApolloServer({
   }),
   engine: {
     reportSchema: true,
-    schemaReportingInitialDelayMaxMs: 1000,
+    schemaReportingInitialDelayMaxMs: 900,
   },
 });
 
