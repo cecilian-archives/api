@@ -26,6 +26,12 @@ const schema = gql`
       sortBy: String
       sortOrder: String
     ): [ArchiveItem]
+    getArchiveItemsByDateRange(
+      startDate: Date
+      endDate: Date
+      sortBy: String
+      sortOrder: String
+    ): [ArchiveItem]
     getCecilianById(id: String): Cecilian
     getYearById(id: String): Year
     getEventById(id: String): Event

@@ -3,6 +3,7 @@ import getOneFromCollectionById from "./getOneFromCollectionById";
 import getOneItemByRef from "./getOneItemByRef";
 import getManyFromCollectionByIdList from "./getManyFromCollectionByIdList";
 import getManyFromCollectionOnMatchFields from "./getManyFromCollectionOnMatchFields";
+import getManyFromCollectionOnFieldInRange from "./getManyFromCollectionOnFieldInRange";
 import getAllItemsInCollection from "./getAllItemsInCollection";
 import getSubcollectionOnCollection from "./getSubcollectionOnCollection";
 import resolveArchiveTagType from "./resolveArchiveTagType";
@@ -26,6 +27,16 @@ const resolvers = {
     getArchiveItemsByArchiveReference: getManyFromCollectionOnMatchFields(
       "archiveItems"
     )([{ field: "archiveId", arg: "reference" }]),
+    getArchiveItemsByDateRange: getManyFromCollectionOnFieldInRange(
+      "archiveItems"
+    )([
+      {
+        field: "associatedDate",
+        startArg: "startDate",
+        endArg: "endDate",
+        dateType: true,
+      },
+    ]),
     getCecilianById: getOneFromCollectionById("cecilians"),
     getYearById: getOneFromCollectionById("years"),
     getEventById: getOneFromCollectionById("events"),
